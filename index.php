@@ -198,9 +198,6 @@
         <a href="index.php?year=<?= $nextYear; ?>&month=<?= $nextMonth; ?>"><i class="fa-solid fa-angle-right icon-d"></i></a>
     </div>
 
-    <article class="year" data-title="<?= $year; ?>">
-        <span class="month" data-title2="<?= $month; ?>"></span>
-
         <?php
         $firstDay = $year . "-" . $month . "-1";
         $firstWeekday = date("w", strtotime($firstDay));
