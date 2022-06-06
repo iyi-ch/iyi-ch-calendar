@@ -16,7 +16,7 @@
 
         }
 
-        /* 背景 */
+        /* 背景 1920 x 1080 */
         .background {
             background-image: url(./image/1.png);
             background-repeat: no-repeat;
@@ -58,6 +58,7 @@
             top: 45px;
             cursor: pointer;
             line-height: 40px;
+            
         }
 
         .icon-a {
@@ -146,7 +147,6 @@
         .weekend {
             color: lightpink;
         }
-
     </style>
 </head>
 
@@ -198,91 +198,90 @@
         <a href="index.php?year=<?= $nextYear; ?>&month=<?= $nextMonth; ?>"><i class="fa-solid fa-angle-right icon-d"></i></a>
     </div>
 
+    <?php
+    $firstDay = $year . "-" . $month . "-1";
+    $firstWeekday = date("w", strtotime($firstDay));
+    $monthDays = date("t", strtotime($firstDay));
+    $lastDay = $year . "-" . $month . "-" . $monthDays;
+    $today = date("Y-m-d");
+    $lastWeekday = date("w", strtotime($lastDay));
+    $dateHouse = [];
+    $sday = date("md", strtotime($today));
+
+    for ($i = 0; $i < $firstWeekday; $i++) {
+        $dateHouse[] = "";
+    }
+    for ($i = 0; $i < $monthDays; $i++) {
+        $date = date("Y-m-d", strtotime("+$i days", strtotime($firstDay)));
+
+        $dateHouse[] = $date;
+    }
+    for ($i = 0; $i < (6 - $lastWeekday); $i++) {
+        $dateHouse[] = "";
+    }
+    ?>
+
+
+    <div class="year">
         <?php
-        $firstDay = $year . "-" . $month . "-1";
+        echo $year . "";
+        ?>
+    </div>
+    <div class="month">
+        <?php
+        echo $month . "";
+        ?>
+    </div>
+    <table>
+        <tr>
+            <td>S</td>
+            <td>M</td>
+            <td>T</td>
+            <td>W</td>
+            <td>T</td>
+            <td>F</td>
+            <td>S</td>
+        </tr>
+        <?php
+        $firstDay = date("Y-") . $month . "-1";
         $firstWeekday = date("w", strtotime($firstDay));
         $monthDays = date("t", strtotime($firstDay));
-        $lastDay = $year . "-" . $month . "-" . $monthDays;
+        $lastDay = date("Y-") . $month . "-" . $monthDays;
         $today = date("Y-m-d");
-        $lastWeekday = date("w", strtotime($lastDay));
-        $dateHouse = [];
-        $sday = date("md", strtotime($today));
 
-        for ($i = 0; $i < $firstWeekday; $i++) {
-            $dateHouse[] = "";
-        }
-        for ($i = 0; $i < $monthDays; $i++) {
-            $date = date("Y-m-d", strtotime("+$i days", strtotime($firstDay)));
 
-            $dateHouse[] = $date;
-        }
-        for ($i = 0; $i < (6 - $lastWeekday); $i++) {
-            $dateHouse[] = "";
+        for ($i = 0; $i < 6; $i++) {
+            echo "<tr>";
+
+            for ($j = 0; $j < 7; $j++) {
+                $d = $i * 7 + ($j + 1) - $firstWeekday - 1;
+
+                if ($d >= 0 && $d < $monthDays) {
+                    $fs = strtotime($firstDay);
+                    $shiftd = strtotime("+$d days", $fs);
+                    $date = date("d", $shiftd);
+                    $w = date("w", $shiftd);
+                    $chktoday = "";
+                    if (date("Y-m-d", $shiftd) == $today) {
+                        $chktoday = 'today';
+                    }
+                    //$date=date("Y-m-d",strtotime("+$d days",strtotime($firstDay)));
+                    if ($w == 0 || $w == 6) {
+                        echo "<td class='weekend $chktoday' >";
+                    } else {
+                        echo "<td class='workday $chktoday'>";
+                    }
+                    echo $date;
+                    echo "</td>";
+                } else {
+                    echo "<td></td>";
+                }
+            }
+
+            echo "</tr>";
         }
         ?>
-
-
-        <div class="year">
-            <?php
-            echo $year . "";
-            ?>
-        </div>
-        <div class="month">
-            <?php
-            echo $month . "";
-            ?>
-        </div>
-        
-        <table>
-            <tr>
-                <td>S</td>
-                <td>M</td>
-                <td>T</td>
-                <td>W</td>
-                <td>T</td>
-                <td>F</td>
-                <td>S</td>
-            </tr>
-            <?php
-            $firstDay = date("Y-") . $month . "-1";
-            $firstWeekday = date("w", strtotime($firstDay));
-            $monthDays = date("t", strtotime($firstDay));
-            $lastDay = date("Y-") . $month . "-" . $monthDays;
-            $today = date("Y-m-d");
-
-
-            for ($i = 0; $i < 6; $i++) {
-                echo "<tr>";
-
-                for ($j = 0; $j < 7; $j++) {
-                    $d = $i * 7 + ($j + 1) - $firstWeekday - 1;
-
-                    if ($d >= 0 && $d < $monthDays) {
-                        $fs = strtotime($firstDay);
-                        $shiftd = strtotime("+$d days", $fs);
-                        $date = date("d", $shiftd);
-                        $w = date("w", $shiftd);
-                        $chktoday = "";
-                        if (date("Y-m-d", $shiftd) == $today) {
-                            $chktoday = 'today';
-                        }
-                        //$date=date("Y-m-d",strtotime("+$d days",strtotime($firstDay)));
-                        if ($w == 0 || $w == 6) {
-                            echo "<td class='weekend $chktoday' >";
-                        } else {
-                            echo "<td class='workday $chktoday'>";
-                        }
-                        echo $date;
-                        echo "</td>";
-                    } else {
-                        echo "<td></td>";
-                    }
-                }
-
-                echo "</tr>";
-            }
-            ?>
-        </table>
+    </table>
     </article>
 </body>
 
